@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mongenscave.mcislive.McIsLive;
+import com.mongenscave.mcislive.utils.LoggerUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,13 +45,13 @@ public class YoutubeApiClient {
             try {
                 String channelId = extractChannelId(channelUrl);
                 if (channelId == null) {
-                    plugin.getLogger().warning("Nem sikerült kinyerni a YouTube Channel ID-t: " + channelUrl);
+                    LoggerUtils.error("Failed to extract channel ID from URL: " + channelUrl);
                     return false;
                 }
 
                 return checkIfChannelIsLive(channelId);
-            } catch (Exception e) {
-                plugin.getLogger().severe("Hiba a YouTube live ellenőrzés során: " + e.getMessage());
+            } catch (Exception exception) {
+                LoggerUtils.error(exception.getMessage());
                 return false;
             }
         });
@@ -59,24 +60,16 @@ public class YoutubeApiClient {
     @Nullable
     private String extractChannelId(@NotNull String url) throws IOException, InterruptedException {
         Matcher channelMatcher = CHANNEL_ID_PATTERN.matcher(url);
-        if (channelMatcher.find()) {
-            return channelMatcher.group(1);
-        }
+        if (channelMatcher.find()) return channelMatcher.group(1);
 
         Matcher usernameMatcher = CHANNEL_USERNAME_PATTERN.matcher(url);
-        if (usernameMatcher.find()) {
-            return resolveChannelByHandle(usernameMatcher.group(1));
-        }
+        if (usernameMatcher.find()) return resolveChannelByHandle(usernameMatcher.group(1));
 
         Matcher customMatcher = CHANNEL_CUSTOM_PATTERN.matcher(url);
-        if (customMatcher.find()) {
-            return resolveChannelByUsername(customMatcher.group(1));
-        }
+        if (customMatcher.find()) return resolveChannelByUsername(customMatcher.group(1));
 
         Matcher userMatcher = CHANNEL_USER_PATTERN.matcher(url);
-        if (userMatcher.find()) {
-            return resolveChannelByUsername(userMatcher.group(1));
-        }
+        if (userMatcher.find()) return resolveChannelByUsername(userMatcher.group(1));
 
         return null;
     }
@@ -102,10 +95,7 @@ public class YoutubeApiClient {
         JsonObject jsonResponse = JsonParser.parseString(response.body()).getAsJsonObject();
         JsonArray items = jsonResponse.getAsJsonArray("items");
 
-        if (items != null && !items.isEmpty()) {
-            return items.get(0).getAsJsonObject().get("id").getAsString();
-        }
-
+        if (items != null && !items.isEmpty()) return items.get(0).getAsJsonObject().get("id").getAsString();
         return null;
     }
 
@@ -130,10 +120,7 @@ public class YoutubeApiClient {
         JsonObject jsonResponse = JsonParser.parseString(response.body()).getAsJsonObject();
         JsonArray items = jsonResponse.getAsJsonArray("items");
 
-        if (items != null && !items.isEmpty()) {
-            return items.get(0).getAsJsonObject().get("id").getAsString();
-        }
-
+        if (items != null && !items.isEmpty()) return items.get(0).getAsJsonObject().get("id").getAsString();
         return null;
     }
 
@@ -198,8 +185,8 @@ public class YoutubeApiClient {
                         "https://www.youtube.com/watch?v=" + videoId,
                         snippet.get("channelTitle").getAsString()
                 );
-            } catch (Exception e) {
-                plugin.getLogger().severe("Hiba a YouTube stream info lekérése során: " + e.getMessage());
+            } catch (Exception exception) {
+                LoggerUtils.error(exception.getMessage());
                 return null;
             }
         });

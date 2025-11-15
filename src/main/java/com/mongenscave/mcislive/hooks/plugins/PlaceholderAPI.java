@@ -1,16 +1,14 @@
 package com.mongenscave.mcislive.hooks.plugins;
 
 import com.mongenscave.mcislive.McIsLive;
-import com.mongenscave.mcislive.data.PlayerMediaData;
 import com.mongenscave.mcislive.identifiers.PlatformType;
+import com.mongenscave.mcislive.identifiers.keys.ConfigKeys;
 import com.mongenscave.mcislive.managers.MediaDataManager;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
 
 @SuppressWarnings("deprecation")
 public class PlaceholderAPI {
@@ -55,59 +53,27 @@ public class PlaceholderAPI {
         @Contract(pure = true)
         @Override
         public String onPlaceholderRequest(@NotNull Player player, @NotNull String params) {
-            if (dataManager == null) return "Error";
+            if (dataManager == null) return "---";
 
-            if (params.equalsIgnoreCase("youtube")) {
-                return dataManager.isLive(player.getUniqueId(), PlatformType.YOUTUBE) ? "§aLIVE" : "§cOFFLINE";
+            switch (params.toLowerCase()) {
+                case "youtube" -> {
+                    return dataManager.isLive(player.getUniqueId(), PlatformType.YOUTUBE) ? ConfigKeys.PLACEHOLDER_LIVE.getString() : ConfigKeys.PLACEHOLDER_OFFLINE.getString();
+                }
+
+                case "twitch" -> {
+                    return dataManager.isLive(player.getUniqueId(), PlatformType.TWITCH) ? ConfigKeys.PLACEHOLDER_LIVE.getString() : ConfigKeys.PLACEHOLDER_OFFLINE.getString();
+                }
+
+                case "tiktok" -> {
+                    return dataManager.isLive(player.getUniqueId(), PlatformType.TIKTOK) ? ConfigKeys.PLACEHOLDER_LIVE.getString() : ConfigKeys.PLACEHOLDER_OFFLINE.getString();
+                }
+
+                case "any" -> {
+                    return dataManager.isLiveOnAnyPlatform(player.getUniqueId()) ? ConfigKeys.PLACEHOLDER_LIVE.getString() : ConfigKeys.PLACEHOLDER_OFFLINE.getString();
+                }
             }
 
-            if (params.equalsIgnoreCase("twitch")) {
-                return dataManager.isLive(player.getUniqueId(), PlatformType.TWITCH) ? "§aLIVE" : "§cOFFLINE";
-            }
-
-            if (params.equalsIgnoreCase("tiktok")) {
-                return dataManager.isLive(player.getUniqueId(), PlatformType.TIKTOK) ? "§aLIVE" : "§cOFFLINE";
-            }
-
-            if (params.equalsIgnoreCase("any")) {
-                return dataManager.isLiveOnAnyPlatform(player.getUniqueId()) ? "§aLIVE" : "§cOFFLINE";
-            }
-
-            if (params.equalsIgnoreCase("youtube_url")) {
-                PlayerMediaData data = dataManager.getMediaData(player.getUniqueId(), PlatformType.YOUTUBE);
-                return data != null ? data.getChannelUrl() : "Nincs beállítva";
-            }
-
-            if (params.equalsIgnoreCase("twitch_url")) {
-                PlayerMediaData data = dataManager.getMediaData(player.getUniqueId(), PlatformType.TWITCH);
-                return data != null ? data.getChannelUrl() : "Nincs beállítva";
-            }
-
-            if (params.equalsIgnoreCase("tiktok_url")) {
-                PlayerMediaData data = dataManager.getMediaData(player.getUniqueId(), PlatformType.TIKTOK);
-                return data != null ? data.getChannelUrl() : "Nincs beállítva";
-            }
-
-            if (params.equalsIgnoreCase("count")) {
-                Map<PlatformType, PlayerMediaData> allData = dataManager.getAllPlayerData(player.getUniqueId());
-                long liveCount = allData.values().stream().filter(PlayerMediaData::isLive).count();
-                return String.valueOf(liveCount);
-            }
-
-            if (params.equalsIgnoreCase("platforms")) {
-                Map<PlatformType, PlayerMediaData> allData = dataManager.getAllPlayerData(player.getUniqueId());
-                if (allData.isEmpty()) return "Nincs";
-
-                StringBuilder sb = new StringBuilder();
-                allData.forEach((platform, data) -> {
-                    if (!sb.isEmpty()) sb.append(", ");
-                    sb.append(platform.name());
-                    if (data.isLive()) sb.append(" §a✓§r");
-                });
-                return sb.toString();
-            }
-
-            return "Invalid placeholder";
+            return "---";
         }
     }
 }

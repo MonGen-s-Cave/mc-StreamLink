@@ -3,3 +3,7 @@ prefix: "&#bd3e4b[IsLive]"
 messages:
   reload: "%prefix% &aYou have successfully reloaded the files!"
   no-permission: "%prefix% &cYou don't have permission for this!"
+  invalid-url: "%prefix% &cInvalid URL!"
+  success-add: "%prefix% &aSuccessfully added!"
+  success-remove: "%prefix% &aSuccessfully removed!"
+  no-data: "%prefix% &cNo data found for this player!"

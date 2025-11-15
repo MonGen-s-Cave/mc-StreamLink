@@ -11,7 +11,13 @@ import java.util.List;
 @Getter
 public enum MessageKeys {
     RELOAD("messages.reload"),
-    NO_PERMISSION("messages.no-permission");
+    NO_PERMISSION("messages.no-permission"),
+
+    INVALID_URL("messages.invalid-url"),
+    NO_DATA("messages.no-data"),
+
+    SUCCESS_ADD("messages.success-add"),
+    SUCCESS_REMOVE("messages.success-remove");
 
     private final String path;
     private static final Config config = McIsLive.getInstance().getLanguage();

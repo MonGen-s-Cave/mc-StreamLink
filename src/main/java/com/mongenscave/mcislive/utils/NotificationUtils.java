@@ -23,7 +23,7 @@ public class NotificationUtils {
 
             String formatted = message
                     .replace("{player}", player.getName())
-                    .replace("{platform}", platform.name());
+                    .replace("{platform}", platform.getFormatted());
 
             plugin.getScheduler().runTask(() -> {
                 for (Player online : Bukkit.getOnlinePlayers()) {
@@ -37,7 +37,7 @@ public class NotificationUtils {
 
             String formatted = message
                     .replace("{player}", player.getName())
-                    .replace("{platform}", platform.name());
+                    .replace("{platform}", platform.getFormatted());
 
             plugin.getScheduler().runTask(() -> {
                 for (Player online : Bukkit.getOnlinePlayers()) {

@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mongenscave.mcislive.McIsLive;
+import com.mongenscave.mcislive.utils.LoggerUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,9 +42,7 @@ public class TwitchApiClient {
     }
 
     private CompletableFuture<Boolean> ensureAccessToken() {
-        if (accessToken != null && tokenExpiry != null && Instant.now().isBefore(tokenExpiry)) {
-            return CompletableFuture.completedFuture(true);
-        }
+        if (accessToken != null && tokenExpiry != null && Instant.now().isBefore(tokenExpiry)) return CompletableFuture.completedFuture(true);
 
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -58,7 +57,7 @@ public class TwitchApiClient {
                 HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
                 if (response.statusCode() != 200) {
-                    plugin.getLogger().severe("Twitch token hiba: " + response.statusCode() + " - " + response.body());
+                    LoggerUtils.error("TwitchApiClient failed to send Twitch API response");
                     return false;
                 }
 
@@ -67,10 +66,9 @@ public class TwitchApiClient {
                 int expiresIn = jsonResponse.get("expires_in").getAsInt();
                 tokenExpiry = Instant.now().plusSeconds(expiresIn - 300);
 
-                plugin.getLogger().info("Twitch access token sikeresen lekérve!");
                 return true;
-            } catch (Exception e) {
-                plugin.getLogger().severe("Hiba a Twitch token lekérése során: " + e.getMessage());
+            } catch (Exception exception) {
+                LoggerUtils.error(exception.getMessage());
                 return false;
             }
         });
@@ -79,47 +77,39 @@ public class TwitchApiClient {
     @Nullable
     private String extractUsername(@NotNull String url) {
         Matcher matcher = USERNAME_PATTERN.matcher(url);
-        if (matcher.find()) {
-            return matcher.group(1).toLowerCase();
-        }
+
+        if (matcher.find()) return matcher.group(1).toLowerCase();
         return null;
     }
 
     @NotNull
     public CompletableFuture<Boolean> isChannelLive(@NotNull String channelUrl) {
         return ensureAccessToken().thenCompose(success -> {
-            if (!success) {
-                return CompletableFuture.completedFuture(false);
-            }
+            if (!success) return CompletableFuture.completedFuture(false);
 
             return CompletableFuture.supplyAsync(() -> {
                 try {
                     String username = extractUsername(channelUrl);
                     if (username == null) {
-                        plugin.getLogger().warning("Nem sikerült kinyerni a Twitch felhasználónevet: " + channelUrl);
+                        LoggerUtils.error("Invalid Channel");
                         return false;
                     }
 
-                    // Először lekérjük a user ID-t
                     String userId = getUserId(username);
                     if (userId == null) {
-                        plugin.getLogger().warning("Nem található Twitch felhasználó: " + username);
+                        LoggerUtils.error("Invalid User");
                         return false;
                     }
 
-                    // Majd ellenőrizzük a stream státuszt
                     return checkIfUserIsLive(userId);
-                } catch (Exception e) {
-                    plugin.getLogger().severe("Hiba a Twitch live ellenőrzés során: " + e.getMessage());
+                } catch (Exception exception) {
+                    LoggerUtils.error(exception.getMessage());
                     return false;
                 }
             });
         });
     }
 
-    /**
-     * User ID lekérése username alapján
-     */
     @Nullable
     private String getUserId(@NotNull String username) throws IOException, InterruptedException {
         String url = String.format("%s/users?login=%s", API_BASE, username);
@@ -134,23 +124,18 @@ public class TwitchApiClient {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
-            plugin.getLogger().warning("Twitch API hiba (user): " + response.statusCode());
+            LoggerUtils.error("Error! Not 200 code: " + response.statusCode());
             return null;
         }
 
         JsonObject jsonResponse = JsonParser.parseString(response.body()).getAsJsonObject();
         JsonArray data = jsonResponse.getAsJsonArray("data");
 
-        if (data != null && data.size() > 0) {
-            return data.get(0).getAsJsonObject().get("id").getAsString();
-        }
+        if (data != null && !data.isEmpty()) return data.get(0).getAsJsonObject().get("id").getAsString();
 
         return null;
     }
 
-    /**
-     * Ellenőrzi hogy a user live-e
-     */
     private boolean checkIfUserIsLive(@NotNull String userId) throws IOException, InterruptedException {
         String url = String.format("%s/streams?user_id=%s", API_BASE, userId);
 
@@ -171,13 +156,9 @@ public class TwitchApiClient {
         JsonObject jsonResponse = JsonParser.parseString(response.body()).getAsJsonObject();
         JsonArray data = jsonResponse.getAsJsonArray("data");
 
-        return data != null && data.size() > 0 &&
-                data.get(0).getAsJsonObject().get("type").getAsString().equals("live");
+        return data != null && !data.isEmpty() && data.get(0).getAsJsonObject().get("type").getAsString().equals("live");
     }
 
-    /**
-     * Live stream adatok lekérése
-     */
     @Nullable
     public CompletableFuture<LiveStreamInfo> getLiveStreamInfo(@NotNull String channelUrl) {
         return ensureAccessToken().thenCompose(success -> {
@@ -219,8 +200,8 @@ public class TwitchApiClient {
                             streamData.get("user_name").getAsString(),
                             streamData.get("viewer_count").getAsInt()
                     );
-                } catch (Exception e) {
-                    plugin.getLogger().severe("Hiba a Twitch stream info lekérése során: " + e.getMessage());
+                } catch (Exception exception) {
+                    LoggerUtils.error(exception.getMessage());
                     return null;
                 }
             });
