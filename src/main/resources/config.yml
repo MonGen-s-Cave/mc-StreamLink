@@ -1,0 +1,27 @@
+aliases:
+  - "live"
+  - "mcislive"
+
+api:
+  youtube:
+    enabled: true
+    api-key: ""
+  twitch:
+    enabled: true
+    client-id: ""
+    client-secret: ""
+
+check:
+  interval: 120
+  enabled: true
+
+notifications:
+  enabled: true
+
+  actionbar:
+    enabled: true
+    message: "&c● &7| &f{player} &fis currently streaming on &#6441a4{platform}"
+
+  chat:
+    enabled: true
+    message: "&c● &7| &f{player} &fis currently streaming on &#6441a4{platform}"

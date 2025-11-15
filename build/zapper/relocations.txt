@@ -1,0 +1,3 @@
+org.bstats:com.mongenscave.mcislive.bstats
+com.github.Anon8281.universalScheduler:com.mongenscave.mcislive.universalScheduler
+dev.dejvokep.boostedyaml:com.mongenscave.mcislive.boostedyaml

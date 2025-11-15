@@ -1,0 +1,5 @@
+prefix: "&bd3e4b[IsLive]"
+
+messages:
+  reload: "%prefix% &aYou have successfully reloaded the files!"
+  no-permission: "%prefix% &cYou don't have permission for this!"
