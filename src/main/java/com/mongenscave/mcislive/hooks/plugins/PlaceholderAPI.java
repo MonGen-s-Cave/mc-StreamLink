@@ -64,10 +64,6 @@ public class PlaceholderAPI {
                     return dataManager.isLive(player.getUniqueId(), PlatformType.TWITCH) ? ConfigKeys.PLACEHOLDER_LIVE.getString() : ConfigKeys.PLACEHOLDER_OFFLINE.getString();
                 }
 
-                case "tiktok" -> {
-                    return dataManager.isLive(player.getUniqueId(), PlatformType.TIKTOK) ? ConfigKeys.PLACEHOLDER_LIVE.getString() : ConfigKeys.PLACEHOLDER_OFFLINE.getString();
-                }
-
                 case "any" -> {
                     return dataManager.isLiveOnAnyPlatform(player.getUniqueId()) ? ConfigKeys.PLACEHOLDER_LIVE.getString() : ConfigKeys.PLACEHOLDER_OFFLINE.getString();
                 }

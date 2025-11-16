@@ -5,8 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 public enum PlatformType {
     YOUTUBE(ConfigKeys.PLACEHOLDER_YOUTUBE),
-    TWITCH(ConfigKeys.PLACEHOLDER_TWITCH),
-    TIKTOK(ConfigKeys.PLACEHOLDER_TWITCH);
+    TWITCH(ConfigKeys.PLACEHOLDER_TWITCH);
 
     private final ConfigKeys placeholderKey;
 

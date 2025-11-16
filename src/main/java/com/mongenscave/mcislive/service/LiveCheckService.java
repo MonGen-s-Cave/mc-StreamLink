@@ -98,7 +98,6 @@ public class LiveCheckService {
                 if (!ConfigKeys.API_TWITCH_ENABLED.getBoolean()) yield CompletableFuture.completedFuture(false);
                 yield twitchClient.isChannelLive(data.getChannelUrl());
             }
-            case TIKTOK -> CompletableFuture.completedFuture(false);
         };
 
         return checkFuture.thenCompose(isLive -> {

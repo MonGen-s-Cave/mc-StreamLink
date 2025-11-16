@@ -23,21 +23,22 @@ public class LoggerUtils {
     }
 
     public void printStartup() {
-        String main = "\u001B[38;2;66;245;152m";
+        String main = "\u001B[38;2;189;62;75m";
         String reset = "\u001B[0m";
         String software = McIsLive.getInstance().getServer().getName();
         String version = McIsLive.getInstance().getServer().getVersion();
 
         info("");
-        info("{}      ____ _   _    _  _____ ____    _    __  __ _____ {}", main, reset);
-        info("{}    / ___| | | |  / \\|_   _/ ___|  / \\  |  \\/  | ____| {}", main, reset);
-        info("{}   | |   | |_| | / _ \\ | || |  _  / _ \\ | |\\/| |  _|   {}", main, reset);
-        info("{}   | |___|  _  |/ ___ \\| || |_| |/ ___ \\| |  | | |___  {}", main, reset);
-        info("{}    \\____|_| |_/_/   \\_\\_| \\____/_/   \\_\\_|  |_|_____| {}", main, reset);
+        info("{}  _____     _      _           {}", main, reset);
+        info("{} |_   _|   | |    (_)          {}", main, reset);
+        info("{}   | |  ___| |     ___   _____ {}", main, reset);
+        info("{}   | | / __| |    | \\\\ \\\\ / / _ \\\\{}", main, reset);
+        info("{}  _| |_\\\\__ \\\\ |____| |\\\\ V /  __/{}", main, reset);
+        info("{} |_____|___/______|_| \\\\_/ \\\\___|{}", main, reset);
         info("");
-        info("{}   The plugin successfully started.{}", main, reset);
-        info("{}   mc-ChatGame {} {}{}", main, software, version, reset);
-        info("{}   Discord @ dc.mongenscave.com{}", main, reset);
+        info("{}  The plugin successfully started.{}", main, reset);
+        info("{}  mc-IsLive {} {}{}", main, software, version, reset);
+        info("{}  Discord @ dc.mongenscave.com{}", main, reset);
         info("");
     }
 }

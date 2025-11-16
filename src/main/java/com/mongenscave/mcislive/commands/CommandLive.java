@@ -109,7 +109,6 @@ public class CommandLive implements OrphanCommand {
         return switch (platform) {
             case YOUTUBE -> url.contains("youtube.com") || url.contains("youtu.be");
             case TWITCH -> url.contains("twitch.tv");
-            case TIKTOK -> url.contains("tiktok.com");
         };
     }
 }

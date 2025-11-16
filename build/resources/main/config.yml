@@ -21,7 +21,6 @@ placeholders:
   live: "&c●&r"
   offline: "&7●&r"
 
-
 notifications:
   enabled: true
 
@@ -34,12 +33,10 @@ notifications:
     message: "&c● &7| &f{player} &fis currently streaming on {platform}"
 
 milestone-commands:
-  teszt1: "give @ALL diamond 1"
-  give_iron: "give @ALL iron_ingot 5"
-  money_reward: "eco give @ALL 100"
-  announce_milestone: "broadcast &a@STREAMER &felérte a(z) &b{viewer_count} &fnézőt a &6{platform} &fplatformon!"
+  give-iron: "give @ALL iron_ingot 5"
+  money-reward: "eco give @ALL 100"
+  announce-milestone: "broadcast &a@STREAMER &freached &b{viewer_count} &fviewers on &6{platform}&f!!"
   celebrate: "execute at @STREAMER run particle minecraft:firework ~ ~2 ~ 1 1 1 0.1 50"
-  spawn_boss: "summon wither ~ ~1 ~ {CustomName:'{\"text\":\"Milestone Boss\"}'}"
-  milestone_title: "execute as @ALL run title @s title {\"text\":\"MILESTONE!\",\"color\":\"gold\"}"
-  milestone_sound: "execute as @ALL run playsound minecraft:ui.toast.challenge_complete master @s ~ ~ ~ 1 1"
-  combo_reward: "give @ALL diamond 3; eco give @ALL 500; broadcast &6Milestone elérve!"
+  milestone-title: "execute as @ALL run title @s title {\"text\":\"MILESTONE!\",\"color\":\"gold\"}"
+  milestone-sound: "execute as @ALL run playsound minecraft:ui.toast.challenge_complete master @s ~ ~ ~ 1 1"
+  combo-reward: "give @ALL diamond 3; eco give @ALL 500; broadcast &6Milestone reached!"
