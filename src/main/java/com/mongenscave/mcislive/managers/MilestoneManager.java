@@ -27,7 +27,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.stream.Collectors;
 
 public class MilestoneManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -85,19 +84,6 @@ public class MilestoneManager {
         }
     }
 
-    @NotNull
-    public List<MilestoneData> getPlayerMilestonesByPlatform(@NotNull UUID playerUuid, @NotNull PlatformType platform) {
-        lock.readLock().lock();
-
-        try {
-            return getPlayerMilestones(playerUuid).stream()
-                    .filter(m -> m.getPlatform() == platform)
-                    .collect(Collectors.toList());
-        } finally {
-            lock.readLock().unlock();
-        }
-    }
-
     public void checkMilestones(@NotNull UUID playerUuid, @NotNull PlatformType platform, int viewerCount, int followerCount) {
         lock.writeLock().lock();
         try {
@@ -122,14 +108,10 @@ public class MilestoneManager {
 
         switch (milestone.getType()) {
             case VIEWER -> {
-                if (viewerCount >= milestone.getValue()) {
-                    shouldTrigger = true;
-                }
+                if (viewerCount >= milestone.getValue()) shouldTrigger = true;
             }
             case FOLLOWER -> {
-                if (followerCount >= milestone.getValue()) {
-                    shouldTrigger = true;
-                }
+                if (followerCount >= milestone.getValue()) shouldTrigger = true;
             }
         }
         return shouldTrigger;
@@ -142,10 +124,10 @@ public class MilestoneManager {
         Player player = Bukkit.getPlayer(playerUuid);
         if (player == null) return;
 
-        String commandTemplate = plugin.getConfiguration().getString("milestone_commands." + milestone.getCommandId());
+        String commandTemplate = plugin.getConfiguration().getString("milestone-commands." + milestone.getCommandId());
 
         if (commandTemplate == null) {
-            plugin.getLogger().warning("Milestone command nem található: " + milestone.getCommandId());
+            LoggerUtils.error("No milestone command found for " + milestone.getCommandId());
             return;
         }
 
@@ -178,16 +160,6 @@ public class MilestoneManager {
                     .filter(m -> m.getPlatform() == platform)
                     .forEach(m -> m.setTriggered(false));
 
-            saveDataAsync();
-        } finally {
-            lock.writeLock().unlock();
-        }
-    }
-
-    public void resetAllMilestones() {
-        lock.writeLock().lock();
-        try {
-            milestones.values().forEach(list -> list.forEach(m -> m.setTriggered(false)));
             saveDataAsync();
         } finally {
             lock.writeLock().unlock();
@@ -234,9 +206,5 @@ public class MilestoneManager {
 
     private void saveDataAsync() {
         plugin.getScheduler().runTaskAsynchronously(this::saveData);
-    }
-
-    public void reload() {
-        loadData();
     }
 }

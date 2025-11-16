@@ -112,13 +112,13 @@ public class LiveCheckService {
 
             if (player != null && player.isOnline()) {
                 if (isLive && !wasLive) notificationService.notifyLiveStart(player, platform);
+                else if (!isLive && wasLive) plugin.getMilestoneManager().resetPlayerMilestones(playerUuid, platform);
             }
 
             previousStates.get(playerUuid).put(platform, isLive);
 
             if (isLive) return checkMilestones(playerUuid, platform, data.getChannelUrl());
             return CompletableFuture.completedFuture(null);
-
         }).exceptionally(exception -> {
             LoggerUtils.error(exception.getMessage());
             return null;

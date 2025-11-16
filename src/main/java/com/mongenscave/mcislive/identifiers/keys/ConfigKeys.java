@@ -30,10 +30,10 @@ public enum ConfigKeys {
     NOTIFICATIONS_CHAT_ENABLED("notifications.chat.enabled"),
     NOTIFICATIONS_CHAT_MESSAGE("notifications.chat.message"),
 
-    PLACEHOLDER_TWITCH("placeholder.twitch"),
-    PLACEHOLDER_YOUTUBE("placeholder.youtube"),
-    PLACEHOLDER_LIVE("placeholder.live"),
-    PLACEHOLDER_OFFLINE("placeholder.offline");
+    PLACEHOLDER_TWITCH("placeholders.twitch"),
+    PLACEHOLDER_YOUTUBE("placeholders.youtube"),
+    PLACEHOLDER_LIVE("placeholders.live"),
+    PLACEHOLDER_OFFLINE("placeholders.offline");
 
     private final String path;
     private static final Config config = McIsLive.getInstance().getConfiguration();
