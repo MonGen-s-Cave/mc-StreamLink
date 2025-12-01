@@ -30,7 +30,11 @@ notifications:
 
   chat:
     enabled: true
-    message: "&c● &7| &f{player} &fis currently streaming on {platform}"
+    messages:
+      - ""
+      - "&c● &7| &f{player} &fis currently streaming on {platform}"
+      - "&2Check out by clicking <url>&a&lHERE</url>({platformProfile})"
+      - ""
 
 milestone-commands:
   give-iron: "give @ALL iron_ingot 5"

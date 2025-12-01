@@ -28,7 +28,7 @@ public enum ConfigKeys {
     NOTIFICATIONS_ACTIONBAR_ENABLED("notifications.actionbar.enabled"),
     NOTIFICATIONS_ACTIONBAR_MESSAGE("notifications.actionbar.message"),
     NOTIFICATIONS_CHAT_ENABLED("notifications.chat.enabled"),
-    NOTIFICATIONS_CHAT_MESSAGE("notifications.chat.message"),
+    NOTIFICATIONS_CHAT_MESSAGES("notifications.chat.messages"),
 
     PLACEHOLDER_TWITCH("placeholders.twitch"),
     PLACEHOLDER_YOUTUBE("placeholders.youtube"),
